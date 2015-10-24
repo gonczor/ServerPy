@@ -2,6 +2,7 @@ import threading
 import socket
 import time
 
+
 class UART_thread(threading.Thread):
     def __init__(self):
         super().__init__()
@@ -31,10 +32,10 @@ class TCP_IP_thread(threading.Thread):
             return
         self.sock.sendall("wrong arg")
 
-
     def send_info(self):
         self.file = open("info.txt", "r")
         self.sock.sendall(self.file.read(10))
+
 
 class Server:
     def __init__(self, address='', port=6001):
@@ -48,3 +49,6 @@ class Server:
             self.conn, self.address = self.sock.accept()
             th = TCP_IP_thread(self.conn)
             th.start()
+
+if __name__ == '__main__':
+    print('hello')
