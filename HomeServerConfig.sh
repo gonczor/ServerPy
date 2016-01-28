@@ -26,6 +26,7 @@ else
     echo "Port: ""$PORT" >> $CONFIG_FILE
 fi
 
-echo "conf changed" | nc -q 0 127.0.0.1 12345
+# Send info to the server that the config file has been changed
+echo "conf changed" | nc -q 0 127.0.0.1 123456
 
 exit 0
