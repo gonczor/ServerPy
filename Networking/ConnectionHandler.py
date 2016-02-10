@@ -1,6 +1,10 @@
 import socketserver
 
 
+def setup_connection_handler(host, port):
+    return ThreadedTCP((host, port), ConnectionHandler)
+
+
 class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
 
