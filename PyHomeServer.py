@@ -23,21 +23,22 @@ class Services:
 
 class ClientCommunicationService(Services):
     def __init__(self):
-        self.__connection__ = None
+        host, port = get_setup()
+        self.__connection__ = ConnectionHandler.setup_connection_handler(host, port)
 
     def service_entry_point(self):
         try:
             self.__connect__()
         except FileNotFoundError:
             Output.config_error()
+        except KeyboardInterrupt:
+            print('Ending')
         finally:
             self.__connection__.shutdown()
 
     # Function will be edited in final version so that restarting server will not be necessary.
     # Currently easier version is used.
     def __connect__(self):
-            host, port = get_setup()
-            self.__connection__ = ConnectionHandler.setup_connection_handler(host, port)
             self.__connection__.serve_forever()
 
 

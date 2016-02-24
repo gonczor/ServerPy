@@ -18,3 +18,6 @@ def setup_handler():
         if addr[0] == '127.0.0.1':
             data_from_local_host_received = True
 
+
+def order_to_shut_down():
+    return 'shut_down'
