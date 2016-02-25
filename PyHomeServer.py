@@ -52,26 +52,23 @@ class EmbeddedCommunicationService(Services):
         pass
 
 
-class Main:
-    @staticmethod
-    def main():
-        client_communication_service = ClientCommunicationService()
-        admin_service = AdminService()
-        embedded_communication_service = EmbeddedCommunicationService()
+def main():
+    client_communication_service = ClientCommunicationService()
+    admin_service = AdminService()
+    embedded_communication_service = EmbeddedCommunicationService()
 
-        client_communication_service_thread = Threads(client_communication_service)
-        admin_service_thread = Threads(admin_service)
-        embedded_communication_service_thread = Threads(embedded_communication_service)
+    client_communication_service_thread = Threads(client_communication_service)
+    admin_service_thread = Threads(admin_service)
+    embedded_communication_service_thread = Threads(embedded_communication_service)
 
-        client_communication_service_thread.start()
-        admin_service_thread.start()
-        embedded_communication_service_thread.start()
+    client_communication_service_thread.start()
+    admin_service_thread.start()
+    embedded_communication_service_thread.start()
 
-        client_communication_service_thread.join()
-        admin_service_thread.join()
-        embedded_communication_service_thread.join()
+    client_communication_service_thread.join()
+    admin_service_thread.join()
+    embedded_communication_service_thread.join()
 
 if __name__ == '__main__':
-    main = Main()
-    main.main()
+    main()
 
