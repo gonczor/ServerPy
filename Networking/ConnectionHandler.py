@@ -2,6 +2,7 @@ import socketserver
 
 
 def setup_connection_handler(host, port):
+    # ThreadedTCP.allow_reuse_address = True
     return ThreadedTCP((host, port), ConnectionHandler)
 
 
@@ -9,7 +10,7 @@ class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
 
 
-class ConnectionHandler(socketserver.BaseRequestHandler,):
+class ConnectionHandler(socketserver.BaseRequestHandler):
     def handle(self):
         # self.request is the TCP socket connected to the client
         self.data = self.request.recv(1024)
@@ -17,3 +18,4 @@ class ConnectionHandler(socketserver.BaseRequestHandler,):
         print(self.data)
         # just send back the same data, but upper-cased
         self.request.sendall(self.data.upper())
+        self.request.close()

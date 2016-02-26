@@ -15,40 +15,57 @@ class Threads(threading.Thread):
     def run(self):
         self.service.service_entry_point()
 
+    def reset(self):
+        self.service.reset()
+
+    def terminate(self):
+        self.service.terminate()
+
 
 class Services:
     # Entry point for threads
     def service_entry_point(self):
         pass
 
+    def terminate(self):
+        pass
 
-class ClientCommunicationService(Services):
+
+class NetworkCommunicationService(Services):
     def __init__(self):
+        self.__connection__ = None
+        self.__setup__()
+
+    def __setup__(self):
         host, port = get_setup()
         self.__connection__ = ConnectionHandler.setup_connection_handler(host, port)
+        # self.__connection__.allow_reuse_address = True
 
     def service_entry_point(self):
         try:
             self.__connect__()
         except FileNotFoundError:
             Output.config_error()
-        except KeyboardInterrupt:
-            print('Ending')
         finally:
             self.__connection__.shutdown()
 
-    # Function will be edited in final version so that restarting server will not be necessary.
-    # Currently easier version is used.
     def __connect__(self):
             self.__connection__.serve_forever()
 
-    @staticmethod
-    def print_test():
-        print('Print test')
+    def terminate(self):
+        self.__connection__.shutdown()
+        self.__connection__.server_close()
+        print('Connection has been shut down.')
 
 
 class EmbeddedCommunicationService(Services):
     def service_entry_point(self):
+        pass
+
+    def terminate(self):
+        pass
+
+    def reset(self):
         pass
 
 
@@ -56,24 +73,26 @@ class Main:
     def __init__(self):
         self.client_communication_service = None
         self.embedded_communication_service = None
+        self.client_communication_service_thread = None
+        self.embedded_communication_service_thread = None
 
-    def handler(self, signum, frame):
-        self.client_communication_service.print_test()
+    def stop_server(self, signum, frame):
+        self.client_communication_service_thread.terminate()
 
     def main(self):
-        signal.signal(signal.SIGHUP, self.handler)
+        signal.signal(signal.SIGTERM, self.stop_server)
 
-        self.client_communication_service = ClientCommunicationService()
+        self.client_communication_service = NetworkCommunicationService()
         self.embedded_communication_service = EmbeddedCommunicationService()
 
-        client_communication_service_thread = Threads(self.client_communication_service)
-        embedded_communication_service_thread = Threads(self.embedded_communication_service)
+        self.client_communication_service_thread = Threads(self.client_communication_service)
+        self.embedded_communication_service_thread = Threads(self.embedded_communication_service)
 
-        client_communication_service_thread.start()
-        embedded_communication_service_thread.start()
+        self.client_communication_service_thread.start()
+        self.embedded_communication_service_thread.start()
 
-        client_communication_service_thread.join()
-        embedded_communication_service_thread.join()
+        self.client_communication_service_thread.join()
+        self.embedded_communication_service_thread.join()
 
 if __name__ == '__main__':
     main = Main()
