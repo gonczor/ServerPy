@@ -5,6 +5,7 @@ from Networking import ConnectionHandler
 from Setup.ReadSetup import get_setup
 import threading
 import signal
+import time
 
 
 class Threads(threading.Thread):
@@ -30,6 +31,9 @@ class Services:
     def terminate(self):
         pass
 
+    def reset(self):
+        pass
+
 
 class NetworkCommunicationService(Services):
     def __init__(self):
@@ -50,12 +54,17 @@ class NetworkCommunicationService(Services):
             self.__connection__.shutdown()
 
     def __connect__(self):
-            self.__connection__.serve_forever()
+        self.__connection__.serve_forever()
 
     def terminate(self):
         self.__connection__.shutdown()
         self.__connection__.server_close()
         print('Connection has been shut down.')
+
+    def reset(self):
+        self.terminate()
+        print('Waiting 60 seconds till eventual lost packets lifetime expires.')
+        time.sleep(60)
 
 
 class EmbeddedCommunicationService(Services):
@@ -75,24 +84,38 @@ class Main:
         self.embedded_communication_service = None
         self.client_communication_service_thread = None
         self.embedded_communication_service_thread = None
+        self.SIGHUP_flag_raised = False
+        self.SIGINT_flag_raised = False
 
     def stop_server(self, signum, frame):
+        self.SIGINT_flag_raised = True
         self.client_communication_service_thread.terminate()
 
+    def reset_server(self, signum, frame):
+        self.SIGHUP_flag_raised = True
+        self.client_communication_service_thread.reset()
+
     def main(self):
-        signal.signal(signal.SIGTERM, self.stop_server)
+        while True:
+            signal.signal(signal.SIGINT, self.stop_server)
+            signal.signal(signal.SIGHUP, self.reset_server)
 
-        self.client_communication_service = NetworkCommunicationService()
-        self.embedded_communication_service = EmbeddedCommunicationService()
+            self.client_communication_service = NetworkCommunicationService()
+            self.embedded_communication_service = EmbeddedCommunicationService()
 
-        self.client_communication_service_thread = Threads(self.client_communication_service)
-        self.embedded_communication_service_thread = Threads(self.embedded_communication_service)
+            self.client_communication_service_thread = Threads(self.client_communication_service)
+            self.embedded_communication_service_thread = Threads(self.embedded_communication_service)
 
-        self.client_communication_service_thread.start()
-        self.embedded_communication_service_thread.start()
+            self.client_communication_service_thread.start()
+            self.embedded_communication_service_thread.start()
 
-        self.client_communication_service_thread.join()
-        self.embedded_communication_service_thread.join()
+            self.client_communication_service_thread.join()
+            self.embedded_communication_service_thread.join()
+
+            if self.SIGINT_flag_raised:
+                break
+            elif self.SIGHUP_flag_raised:
+                self.SIGHUP_flag_raised = False
 
 if __name__ == '__main__':
     main = Main()

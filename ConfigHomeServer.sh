@@ -27,13 +27,6 @@ else
 fi
 
 SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
-kill -s SIGTERM $SERVER_PID
-
-echo 'Waiting 60 seconds for eventual lost packets to come to the end of lifetime'
-sleep 60s
-echo Restarintg the server
-
-# we don't want to be caught by starting process, so we send it to the background
-./PyHomeServer.py&
+kill -s SIGHUP $SERVER_PID
 
 exit 0
