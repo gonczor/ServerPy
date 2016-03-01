@@ -27,6 +27,7 @@ else
 fi
 
 SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
-kill -s SIGHUP $SERVER_PID
-
+if [ "$SERVER_PID" != "" ]; then
+    kill -s SIGHUP $SERVER_PID
+fi
 exit 0
