@@ -1,6 +1,6 @@
 class Order:
     def get_message(self):
-        raise NotImplementedError('Order must be specified')
+        pass
 
 
 class Welcome(Order):
