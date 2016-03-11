@@ -39,11 +39,11 @@ class NetworkCommunicationService(Services):
     def __init__(self):
         self.__connection__ = None
         self.__setup__()
+        self.__time_wait__ = 60
 
     def __setup__(self):
         host, port = get_setup()
         self.__connection__ = ConnectionHandler.setup_connection_handler(host, port)
-        # self.__connection__.allow_reuse_address = True
 
     def service_entry_point(self):
         try:
@@ -63,8 +63,16 @@ class NetworkCommunicationService(Services):
 
     def reset(self):
         self.terminate()
-        print('Waiting 60 seconds till eventual lost packets lifetime expires.')
-        time.sleep(60)
+        self.__sleep__()
+
+    def __sleep__(self):
+        print('Going to sleep for 60 seconds...')
+        t = self.__time_wait__
+        while t > 0:
+            time.sleep(5)
+            t -= 5
+            print('\r{0} seconds remaining...'.format(t), end='')
+        print('\nServer restarted.')
 
 
 class EmbeddedCommunicationService(Services):
