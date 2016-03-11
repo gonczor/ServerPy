@@ -1,4 +1,4 @@
-from Networking import Orders
+from Networking import Orders, Errors
 
 
 class OrderFactory:
@@ -9,21 +9,18 @@ class OrderFactory:
         elif order == 'send_file':
             return SendFileOrderFactory()
         else:
-            raise UnknownOrderError
+            raise Errors.UnknownOrderError
 
-    def create_order(self):
+    def create_order(self, request):
         pass
 
 
 class WelcomeOrderFactory(OrderFactory):
-    def create_order(self):
-        return Orders.Welcome()
+    def create_order(self, request):
+        return Orders.Welcome(request)
 
 
 class SendFileOrderFactory(OrderFactory):
-    def create_order(self):
-        return Orders.SendFile()
+    def create_order(self, request):
+        return Orders.SendFile(request)
 
-
-class UnknownOrderError(Exception):
-    pass

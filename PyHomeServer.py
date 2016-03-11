@@ -44,7 +44,6 @@ class NetworkCommunicationService(Services):
     def __setup__(self):
         host, port = get_setup()
         self.__connection__ = ConnectionHandler.setup_connection_handler(host, port)
-        # self.__connection__.allow_reuse_address = True
 
     def service_entry_point(self):
         try:
