@@ -36,21 +36,21 @@ class SendFile(Order):
 
     def perform_order(self):
         self.__confirm_order__()
-        self.__read_file__()
+        # self.__read_file__()
         self.__send_file_size__()
         self.__send_requested_data__()
 
     def __send_requested_data__(self):
-        self.request.sendall(self.__file_contents__)
+        f = open(self.__file_name__)
+        self.request.sendall(f.read().encode('utf-8'))
+        f.close()
 
     def __send_file_size__(self):
+        self.__file_size__ = str(os.path.getsize(self.__file_name__)).encode('utf-8')
         self.request.send(self.__file_size__)
         self.request.send('\n'.encode('utf-8'))
         # TODO temporary solution required to allow client receive file size and content separately
         time.sleep(0.1)
 
     def __read_file__(self):
-        self.__file_size__ = str(os.path.getsize(self.__file_name__)).encode('utf-8')
-        f = open(self.__file_name__)
-        self.__file_contents__ = f.read().encode('utf-8')
-        f.close()
+        pass
