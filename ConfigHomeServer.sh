@@ -1,5 +1,4 @@
 #!/bin/sh
-
 DEFAULT_ADDR="127.0.0.1"
 DEFAULT_PORT="12345"
 CONFIG_FILE="PyHomeServer.conf"

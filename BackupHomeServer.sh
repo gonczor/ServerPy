@@ -1,13 +1,35 @@
 #!/bin/sh
 
-# check if the baskup is already set up
-BACKUP_SET=$(cat /etc/crontab | grep BackupHomeServer.sh | grep -v grep)
+# how this shit will work:
+# checks whether setup mode (-s or --set) has been chosen
+# if yes asks for:
+#   -directory to store backup
+#   -time interval between backups
 
-if [ $BACKUP_SET="" ]; then
-	printf "No backup schedule found in crontab file. Create now?\nY/n"
-	read CHOICE
+function set_backup(){
+    echo 'set'
+}
+
+function perform_backup(){
+    DATE=$(date +%Y-%m-%d)
+    DATE+=".tar.gz"
+    if [ ! -d "Backup" ]; then
+        mkdir Backup
+    fi
+    tar -cpzf Backup/$DATE Test
+}
+
+function show_help(){
+    cat help
+}
+
+if [ "$#" = 0 ]; then
+    perform_backup
+elif [ "$1" = "-s" ] || [ "$1" = "--set" ]; then
+    set_backup
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    show_help
 else
-	echo "GIT"
+    echo "Unknown command. Run script with -h to show help."
 fi
 
-echo $CHOICE
