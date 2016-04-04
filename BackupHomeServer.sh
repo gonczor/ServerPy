@@ -13,10 +13,12 @@ function set_backup(){
 function perform_backup(){
     DATE=$(date +%Y-%m-%d)
     DATE+=".tar.gz"
-    if [ ! -d "Backup" ]; then
-        mkdir Backup
+    BACKUP_DIR=$(cat PyHomeServer.conf | grep "Backup directory:" |  awk '{print $3}')
+    if [ ! -d "$BACKUP_DIR" ]; then
+        mkdir $BACKUP_DIR
     fi
     tar -cpzf Backup/$DATE Test
+    echo $BACKUP_DIR
 }
 
 function show_help(){
