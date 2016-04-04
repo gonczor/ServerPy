@@ -1,17 +1,17 @@
 #!/bin/sh
-DEFAULT_ADDR="127.0.0.1"
+DEFAULT_ADR="127.0.0.1"
 DEFAULT_PORT="12345"
 CONFIG_FILE="PyHomeServer.conf"
 
 echo Please enter the address you want to use and press enter or press enter to use default one.
-echo default port number is: $DEFAULT_ADDR
+echo Default adress is: $DEFAULT_ADDR
 
-read ADDR
+read ADR
 
-if [ "$ADDR" = "" ]; then
-    echo "Address: "$DEFAULT_ADDR > $CONFIG_FILE
+if [ "$ADR" = "" ]; then
+    echo "Address: "$DEFAULT_ADR > $CONFIG_FILE
 else
-    echo "Address: "$ADDR > $CONFIG_FILE
+    echo "Address: "$ADR > $CONFIG_FILE
 fi
 
 echo Please enter the port you want to use and press enter or press enter to use default one.
