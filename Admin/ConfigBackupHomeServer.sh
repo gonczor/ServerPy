@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# TODO get rid of all this shit and write from scratch something normal
+
 function create_new_backup {
 	printf "Creating a new backup\n"
 }

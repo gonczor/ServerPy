@@ -26,8 +26,6 @@ if [ "$#" = 0 ]; then
     perform_backup
 elif [ "$1" = "-s" ] || [ "$1" = "--set" ]; then
     set_backup
-elif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-    show_help
 elif [ "$1" = "-r" ] || [ "$1" = "--retrieve" ]; then
     retrieve_latest_backup
 else
