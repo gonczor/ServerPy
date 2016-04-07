@@ -29,14 +29,13 @@ class SendFile(Order):
         super().__init__(request)
         self.__file_size__ = 0
         self.__file_contents__ = None
-        self.__file_name__ = 'Test'
+        self.__file_name__ = 'Database/Test'
 
     def get_message(self):
         return 'send_file\n'
 
     def perform_order(self):
         self.__confirm_order__()
-        # self.__read_file__()
         self.__send_file_size__()
         self.__send_requested_data__()
 
@@ -51,6 +50,3 @@ class SendFile(Order):
         self.request.send('\n'.encode('utf-8'))
         # TODO temporary solution required to allow client receive file size and content separately
         time.sleep(0.1)
-
-    def __read_file__(self):
-        pass

@@ -1,0 +1,10 @@
+Run python3 PyHomeServer.py to run server
+
+   * no args - start
+   * start
+   * config
+   * help
+   * backup - run backup
+       - set
+       - retrieve
+   * help

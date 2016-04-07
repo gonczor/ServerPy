@@ -17,6 +17,7 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         try:
+            self.__authorize_connection__()
             self.__receive_data_from_network__()
             order_factory = OrderFactory.OrderFactory.create_factory(self.data)
             order = order_factory.create_order(self.request)
@@ -31,4 +32,7 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
     def __receive_data_from_network__(self):
         self.data = self.request.recv(1024)
         self.data = self.data.decode('utf-8')
-        print(self.data)
+
+    def __authorize_connection__(self):
+        pass
+
