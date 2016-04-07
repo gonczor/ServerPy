@@ -14,9 +14,6 @@ function perform_backup(){
     tar -cpzf $BACKUP_DIR/$BACKUP_FILENAME Test
 }
 
-function show_help(){
-    cat help
-}
 
 function retrieve_latest_backup(){
     echo To be implemented
@@ -24,11 +21,7 @@ function retrieve_latest_backup(){
 
 if [ "$#" = 0 ]; then
     perform_backup
-elif [ "$1" = "-s" ] || [ "$1" = "--set" ]; then
-    set_backup
-elif [ "$1" = "-r" ] || [ "$1" = "--retrieve" ]; then
+elif [ "$1" = "retrieve" ]; then
     retrieve_latest_backup
-else
-    echo "Unknown command. Run script with -h to show help."
 fi
 

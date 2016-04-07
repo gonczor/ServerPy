@@ -42,6 +42,8 @@ else
     echo "Backup directory: $BACKUP_DIRECTORY" >> $CONFIG_FILE
 fi
 
+# TODO implement backup setting
+
 SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
 if [ "$SERVER_PID" != "" ]; then
     kill -s SIGHUP $SERVER_PID
