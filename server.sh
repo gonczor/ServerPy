@@ -12,11 +12,7 @@ elif [ "$1" = "help" ]; then
 elif [ "$1" = "stop" ]; then
     bash Admin/StopHomeServer.sh
 elif [ "$1" = "backup" ]; then
-    if [ "$2" = "" ]; then
-        bash Admin/BackupHomeServer.sh
-    elif [ "$2" = "retrieve" ]; then
-        bash Admin/BackupHomeServer.sh $2
-    fi
+    bash Admin/BackupHomeServer.sh $2
 else
     echo "Unknown command. Run script with \"help\" to display help."
 fi
