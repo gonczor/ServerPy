@@ -56,8 +56,9 @@ docs/_build/
 # PyBuilder
 target/
 
-# pycharm settings
+# pycharm and ninja-ide settings
 .idea
+*.nja
 
 *~
 
