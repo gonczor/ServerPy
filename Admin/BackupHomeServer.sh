@@ -8,10 +8,12 @@ function perform_backup(){
     BACKUP_FILENAME=$(date +%Y-%m-%d)
     BACKUP_FILENAME+=".tar.gz"
     BACKUP_DIR=$(cat Configuration/PyHomeServer.conf | grep "Backup directory:" |  awk '{print $3}')
+
+    FILES_TO_INCLUDE="Configuration/ Database/"
     if [ ! -d "$BACKUP_DIR" ]; then
         mkdir $BACKUP_DIR
     fi
-    tar -cvzpf $BACKUP_DIR/$BACKUP_FILENAME Test
+    tar -cvzpf $BACKUP_DIR/$BACKUP_FILENAME $FILES_TO_INCLUDE
 }
 
 
