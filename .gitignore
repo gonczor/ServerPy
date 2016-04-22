@@ -56,14 +56,14 @@ docs/_build/
 # PyBuilder
 target/
 
-# pycharm settings
+# pycharm and ninja-ide settings
 .idea
+*.nja
+*.swp
 
 *~
 
-# test file
-Database/Test
-
-# Backups made while testing
+# Backups, databases, passwords and other working files
+Configuration/
 Backup/
 

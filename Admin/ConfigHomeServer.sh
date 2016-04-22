@@ -3,7 +3,7 @@ DEFAULT_NETWORK_INTERFACE="wlan0"
 DEFAULT_ADR="127.0.0.1"
 DEFAULT_PORT="12345"
 DEFAULT_BACKUP_DIRECTORY="Backup/"
-CONFIG_FILE="PyHomeServer.conf"
+CONFIG_FILE="Configuration/PyHomeServer.conf"
 
 echo Enter address you want to use. The list of available ports with interfaces is listed below.
 ip -f inet addr | awk '{print  $2}' | grep -v forever

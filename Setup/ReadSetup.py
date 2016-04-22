@@ -1,6 +1,6 @@
 import re
 
-__config_file_name__ = 'PyHomeServer.conf'
+__config_file_name__ = 'Configuration/PyHomeServer.conf'
 __port_pattern__ = 'Port: ([0-9]+)'
 __address_pattern__ = 'Address: ([0-9]+.[0-9]+.[0-9]+.[0-9]+)+'
 
