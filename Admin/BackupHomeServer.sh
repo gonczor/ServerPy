@@ -1,7 +1,18 @@
 #!/bin/sh
 
 function set_backup(){
-    echo 'set' > "Configuration/crontab"
+    SCHEDULE_FILE="Configuration/crontab"
+    SCHEDULE="* * * * *"
+    USER=$(whoami)
+    WORKING_DIRECTORY="$PWD"
+    SCRIPT_NAME="/Admin/BackupHomeServer.sh"
+    COMMAND=' /bin/bash ' #these spaces are essential for proper file formatting
+    printf "$SCHEDULE " > $SCHEDULE_FILE
+    #printf "$USER" >> $SCHEDULE_FILE
+    printf "$COMMAND" >> $SCHEDULE_FILE
+    printf "$WORKING_DIRECTORY" >> $SCHEDULE_FILE
+    printf "$SCRIPT_NAME\n" >> $SCHEDULE_FILE
+    crontab $SCHEDULE_FILE
 }
 
 function perform_backup(){
@@ -21,7 +32,7 @@ function retrieve_latest_backup(){
     echo To be implemented
 }
 
-if [ "$#" = 0 ]; then
+if [ "$#" = "0" ]; then
     perform_backup
 elif [ "$1" = "retrieve" ]; then
     retrieve_latest_backup
