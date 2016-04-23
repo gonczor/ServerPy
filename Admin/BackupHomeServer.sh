@@ -3,10 +3,10 @@
 WORKING_DIRECTORY="$HOME/Documents/ServerPy"
 
 function set_backup(){
-    SCHEDULE_FILE="$WORKING_DIRECTORY/Configuration/crontab"
+    SCHEDULE_FILE=$WORKING_DIRECTORY/Configuration/crontab
     SCHEDULE="* * * * *"
     USER=$(whoami)
-    SCRIPT_NAME="$0"
+    SCRIPT_NAME=$WORKING_DIRECTORY/$0
     COMMAND='/bin/bash' #these spaces are essential for proper file formatting
     printf "$SCHEDULE " > $SCHEDULE_FILE
     printf " $USER " >> $SCHEDULE_FILE
@@ -21,16 +21,18 @@ function perform_backup(){
     BACKUP_DIR="$WORKING_DIRECTORY/"
     BACKUP_DIR+="$(cat $WORKING_DIRECTORY/Configuration/PyHomeServer.conf | grep "Backup directory:" |  awk '{print $3}')"
 
-    echo "$BACKUP_DIR"
-    FILES_TO_INCLUDE="$WORKING_DIRECTORY/Configuration/ $WORKING_DIRECTORY/Database/"
-    echo Files to include
-    echo "$FILES_TO_INCLUDE"
+    FILES_TO_INCLUDE=$WORKING_DIRECTORY/Configuration
+    FILES_TO_INCLUDE+=" "
+    FILES_TO_INCLUDE+=$WORKING_DIRECTORY/Database
+    echo $FILES_TO_INCLUDE
+
     if [ ! -d "$BACKUP_DIR" ]; then
         mkdir "$BACKUP_DIR"
     fi
-	echo "I'm before taring"
-    tar cvzpf "$BACKUP_DIR/$BACKUP_FILENAME" "$FILES_TO_INCLUDE"
-	echo "And after"
+    touch trigger
+
+    tar -cpzvf $BACKUP_DIR/$BACKUP_FILENAME $FILES_TO_INCLUDE
+	
 }
 
 
