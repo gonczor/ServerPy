@@ -1,15 +1,18 @@
 #!/bin/bash
 
+#TODO
+# *allow user to choose how often and when they want backups
+# *allow change of working directory
+#
+# possibly this will be done in a separate python program
 WORKING_DIRECTORY="$HOME/Documents/ServerPy"
 
 function set_backup(){
     SCHEDULE_FILE=$WORKING_DIRECTORY/Configuration/crontab
     SCHEDULE="* * * * *"
-    USER=$(whoami)
     SCRIPT_NAME=$WORKING_DIRECTORY/$0
     COMMAND='/bin/bash' #these spaces are essential for proper file formatting
     printf "$SCHEDULE " > $SCHEDULE_FILE
-    printf " $USER " >> $SCHEDULE_FILE
     printf " $COMMAND " >> $SCHEDULE_FILE
     printf " $SCRIPT_NAME\n" >> $SCHEDULE_FILE
     crontab "$SCHEDULE_FILE"
