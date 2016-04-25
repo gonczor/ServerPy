@@ -66,4 +66,4 @@ target/
 # Backups, databases, passwords and other working files
 Configuration/
 Backup/
-
+Database/
