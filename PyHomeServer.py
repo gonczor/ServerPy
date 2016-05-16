@@ -47,13 +47,13 @@ class NetworkCommunicationService(Services):
 
     def service_entry_point(self):
         try:
-            self.__connect__()
+            self.__serve__()
         except FileNotFoundError:
             Output.config_error()
         finally:
             self.__connection__.shutdown()
 
-    def __connect__(self):
+    def __serve__(self):
         self.__connection__.serve_forever()
 
     def terminate(self):
