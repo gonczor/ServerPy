@@ -37,37 +37,37 @@ class Services:
 
 class NetworkCommunicationService(Services):
     def __init__(self):
-        self.__connection__ = None
-        self.__setup__()
-        self.__time_wait__ = 60
+        self._connection = None
+        self._setup()
+        self._time_wait = 60
 
-    def __setup__(self):
+    def _setup(self):
         host, port = get_setup()
-        self.__connection__ = ConnectionHandler.setup_connection_handler(host, port)
+        self._connection = ConnectionHandler.setup_connection_handler(host, port)
 
     def service_entry_point(self):
         try:
-            self.__serve__()
+            self._serve()
         except FileNotFoundError:
             Output.config_error()
         finally:
-            self.__connection__.shutdown()
+            self._connection.shutdown()
 
-    def __serve__(self):
-        self.__connection__.serve_forever()
+    def _serve(self):
+        self._connection.serve_forever()
 
     def terminate(self):
-        self.__connection__.shutdown()
-        self.__connection__.server_close()
+        self._connection.shutdown()
+        self._connection.server_close()
         print('Connection has been shut down.')
 
     def reset(self):
         self.terminate()
-        self.__sleep__()
+        self._sleep()
 
-    def __sleep__(self):
+    def _sleep(self):
         print('Going to sleep for 60 seconds...')
-        t = self.__time_wait__
+        t = self._time_wait
         while t > 0:
             time.sleep(5)
             t -= 5

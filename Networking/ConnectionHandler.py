@@ -1,7 +1,11 @@
 import socketserver
-from datetime import datetime
+from datetime import datetime, timedelta
+
 from Networking import Errors, OrderFactory
 import threading
+
+banned_addresses = []
+lock_ban = threading.Lock()
 
 
 def setup_connection_handler(host, port):
@@ -11,20 +15,22 @@ def setup_connection_handler(host, port):
 class BannedAddresses:
     def __init__(self, address):
         self.address = address
-        self.ban_timestamp = datetime.now()
+        self.ban_expiry = datetime.now()
+        self.ban_expiry += timedelta(seconds=60)
 
 
 class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
-    banned_addresses = [BannedAddresses(None)]
-    lock = threading.Lock()
+    pass
 
 
 class ConnectionHandler(socketserver.BaseRequestHandler):
+    global banned_addresses
+    global lock_ban
 
     def handle(self):
         try:
-            self.__authorize_connection__()
-            self.__receive_data_from_network__()
+            self._authorize_connection()
+            self._receive_data_from_network()
             order_factory = OrderFactory.OrderFactory.create_factory(self.data)
             order = order_factory.create_order(self.request)
             order.perform_order()
@@ -34,38 +40,41 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
             # Therefore connection is being shut down.
             print('Wrong order! Shutting connection down.')
             self.request.close()
-            self.__ban_client__()
+            self._ban_client()
 
         except Errors.AuthorizationError:
             self.request.close()
 
-    def __receive_data_from_network__(self):
+    def _receive_data_from_network(self):
         self.data = self.request.recv(1024)
         self.data = self.data.decode('utf-8')
 
-    # TODO: extend this, introduce password checking
-    def __authorize_connection__(self):
-        self.__unban_after_withdrawal_period__()
-        if self.__is_banned__():
+    # TODO: extend this, introduce password checking, SSL
+    def _authorize_connection(self):
+        self._unban_after_withdrawal_period()
+        if self._is_banned():
             raise Errors.AuthorizationError
 
-    def __unban_after_withdrawal_period__(self):
+    def _unban_after_withdrawal_period(self):
         current_timestamp = datetime.now()
-        ThreadedTCP.lock.acquire()
-        to_delete = []
-        for banned in ThreadedTCP.banned_addresses:
-            elapsed = current_timestamp - banned.ban_timestamp
-            if elapsed.days >= 1 or elapsed.seconds > 60:
-                to_delete.append(banned)
+        with lock_ban:
+            to_delete = []
+            for banned in banned_addresses:
+                if self._ban_has_expired(banned, current_timestamp):
+                    to_delete.append(banned)
 
-        for td in to_delete:
-            ThreadedTCP.banned_addresses.remove(td)
-        ThreadedTCP.lock.release()
+            for td in to_delete:
+                banned_addresses.remove(td)
 
-    def __is_banned__(self):
-        banned_addresses = (l.address for l in ThreadedTCP.banned_addresses)
-        if self.client_address[0] in banned_addresses:
+    def _is_banned(self):
+        banned = (l.address for l in banned_addresses)
+        if self.client_address[0] in banned:
+            print("Banned: " + self.client_address[0])
             return True
 
-    def __ban_client__(self):
-        ThreadedTCP.banned_addresses.append(BannedAddresses(self.client_address[0]))
+    def _ban_client(self):
+        banned_addresses.append(BannedAddresses(self.client_address[0]))
+
+    @staticmethod
+    def _ban_has_expired(banned, current_timestamp):
+        return current_timestamp > banned.ban_expiry
