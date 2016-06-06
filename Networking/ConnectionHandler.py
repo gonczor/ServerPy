@@ -1,10 +1,12 @@
 import socketserver
-from datetime import datetime, timedelta
-
-from Networking import Errors, OrderFactory
 import threading
+from datetime import datetime, timedelta
+from Networking import Errors, OrderFactory
+from Networking.BannedAddressesCache import BannedAddressesCache
 
-banned_addresses = []
+
+banned_addresses_tmp = []
+banned_addresses = BannedAddressesCache()
 lock_ban = threading.Lock()
 
 
@@ -15,8 +17,7 @@ def setup_connection_handler(host, port):
 class BannedAddresses:
     def __init__(self, address):
         self.address = address
-        self.ban_expiry = datetime.now()
-        self.ban_expiry += timedelta(seconds=60)
+        self.ban_expiry = datetime.now() + timedelta(seconds=60)
 
 
 class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
@@ -24,7 +25,7 @@ class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 
 class ConnectionHandler(socketserver.BaseRequestHandler):
-    global banned_addresses
+    global banned_addresses_tmp
     global lock_ban
 
     def handle(self):
@@ -51,30 +52,12 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
 
     # TODO: extend this, introduce password checking, SSL
     def _authorize_connection(self):
-        self._unban_after_withdrawal_period()
         if self._is_banned():
             raise Errors.AuthorizationError
 
-    def _unban_after_withdrawal_period(self):
-        current_timestamp = datetime.now()
-        with lock_ban:
-            to_delete = []
-            for banned in banned_addresses:
-                if self._ban_has_expired(banned, current_timestamp):
-                    to_delete.append(banned)
-
-            for td in to_delete:
-                banned_addresses.remove(td)
-
     def _is_banned(self):
-        banned = (l.address for l in banned_addresses)
-        if self.client_address[0] in banned:
-            print("Banned: " + self.client_address[0])
-            return True
+        return banned_addresses.contains(self.client_address[0])
 
     def _ban_client(self):
-        banned_addresses.append(BannedAddresses(self.client_address[0]))
+        banned_addresses.add(self.client_address[0])
 
-    @staticmethod
-    def _ban_has_expired(banned, current_timestamp):
-        return current_timestamp > banned.ban_expiry
