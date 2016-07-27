@@ -1,6 +1,10 @@
 import socketserver
 import threading
+import ssl
 from datetime import datetime, timedelta
+
+import os
+
 from Networking import Errors, OrderFactory
 from Networking.BannedAddressesCache import BannedAddressesCache
 
@@ -21,7 +25,14 @@ class BannedAddresses:
 
 
 class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
-    pass
+    def get_request(self):
+        (socket, address) = socketserver.TCPServer.get_request(self)
+        return (ssl.wrap_socket(socket, server_side=True,
+                                certfile=os.path.join('/Users/gonczor/Documents/Python/ServerPy', 'Configuration',
+                                                      'Certificates', 'server.crt'),
+                                keyfile=os.path.join('/Users/gonczor/Documents/Python/ServerPy', 'Configuration',
+                                                     'Certificates', 'server.key'),
+                                ), address)
 
 
 class ConnectionHandler(socketserver.BaseRequestHandler):

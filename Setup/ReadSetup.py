@@ -1,30 +1,30 @@
 import re
 
-__config_file_name__ = 'Configuration/PyHomeServer.conf'
-__port_pattern__ = 'Port: ([0-9]+)'
-__address_pattern__ = 'Address: ([0-9]+.[0-9]+.[0-9]+.[0-9]+)+'
+_config_file_name = 'Configuration/PyHomeServer.conf'
+_port_pattern = 'Port: ([0-9]+)'
+_address_pattern = 'Address: ([0-9]+.[0-9]+.[0-9]+.[0-9]+)+'
 
 
 def get_setup():
     """Return setup in form of address, port"""
-    contents = __get_file_contents__()
-    address = __get_address__(contents)
-    port = __get_port__(contents)
+    contents = _get_file_contents()
+    address = _get_address(contents)
+    port = _get_port(contents)
     return address, port
 
 
-def __get_file_contents__():
-    f = open(__config_file_name__, 'r')
+def _get_file_contents():
+    f = open(_config_file_name, 'r')
     contents = f.read()
     f.close()
     return contents
 
 
-def __get_port__(content):
-    port = re.search(__port_pattern__, content)
+def _get_port(content):
+    port = re.search(_port_pattern, content)
     return int(port.group(1))
 
 
-def __get_address__(content):
-    address = re.search(__address_pattern__, content)
+def _get_address(content):
+    address = re.search(_address_pattern, content)
     return address.group(1)
