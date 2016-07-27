@@ -1,4 +1,5 @@
 import re
+from . import Settings
 
 _config_file_name = 'Configuration/PyHomeServer.conf'
 _port_pattern = 'Port: ([0-9]+)'
@@ -10,6 +11,8 @@ def get_setup():
     contents = _get_file_contents()
     address = _get_address(contents)
     port = _get_port(contents)
+    Settings.ADDRESS = address
+    Settings.PORT = port
     return address, port
 
 

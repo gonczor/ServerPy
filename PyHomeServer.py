@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-from Interface import Output
-from Networking import ConnectionHandler
-from Setup.ReadSetup import get_setup
 import threading
 import signal
 import time
+from Interface import Output
+from Networking import ConnectionHandler
+from Setup.ReadSetup import get_setup
+from Setup import Settings
 
 
 class Threads(threading.Thread):
@@ -42,8 +43,7 @@ class NetworkCommunicationService(Services):
         self._time_wait = 60
 
     def _setup(self):
-        host, port = get_setup()
-        self._connection = ConnectionHandler.setup_connection_handler(host, port)
+        self._connection = ConnectionHandler.setup_connection_handler(Settings.ADDRESS, Settings.PORT)
 
     def service_entry_point(self):
         try:
@@ -105,6 +105,8 @@ class Main:
 
     def main(self):
         while True:
+            get_setup()
+
             signal.signal(signal.SIGINT, self.stop_server)
             signal.signal(signal.SIGHUP, self.reset_server)
 
