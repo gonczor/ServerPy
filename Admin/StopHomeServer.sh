@@ -6,9 +6,8 @@ if [ "$SERVER_PID" = "" ]; then
 else
     kill -s SIGINT $SERVER_PID
     echo "Waiting for server to stop..."
-    sleep 1s
-    SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
-    if [ "$SERVER_PID" = "" ]; then
-        echo "Server has been stopped successfully"
-    fi
+    while [ "$SERVER_PID" != "" ]; do
+        SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
+    done
+    echo "Server has been stopped successfully"
 fi

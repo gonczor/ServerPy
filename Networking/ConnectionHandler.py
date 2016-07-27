@@ -7,6 +7,7 @@ import os
 
 from Networking import Errors, OrderFactory
 from Networking.BannedAddressesCache import BannedAddressesCache
+from Setup.Settings import BASE_PATH
 
 
 banned_addresses_tmp = []
@@ -28,11 +29,9 @@ class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
     def get_request(self):
         (socket, address) = socketserver.TCPServer.get_request(self)
         return (ssl.wrap_socket(socket, server_side=True,
-                                certfile=os.path.join('/Users/gonczor/Documents/Python/ServerPy', 'Configuration',
-                                                      'Certificates', 'server.crt'),
-                                keyfile=os.path.join('/Users/gonczor/Documents/Python/ServerPy', 'Configuration',
-                                                     'Certificates', 'server.key'),
-                                ), address)
+                                certfile=os.path.join(BASE_PATH, 'Configuration', 'Certificates', 'server.crt'),
+                                keyfile=os.path.join(BASE_PATH, 'Configuration', 'Certificates', 'server.key'),),
+                address)
 
 
 class ConnectionHandler(socketserver.BaseRequestHandler):
@@ -64,6 +63,7 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
     # TODO: extend this, introduce password checking, SSL
     def _authorize_connection(self):
         if self._is_banned():
+            print('Address: {0} is banned. Access to server denied.'.format(self.client_address[0]))
             raise Errors.AuthorizationError
 
     def _is_banned(self):

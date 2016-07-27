@@ -5,10 +5,11 @@
 # *allow change of working directory
 #
 # possibly this will be done in a separate python program
-WORKING_DIRECTORY="$HOME/Documents/ServerPy"
+WORKING_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 
 function set_backup(){
     SCHEDULE_FILE=$WORKING_DIRECTORY/Configuration/crontab
+    echo "schedule file: $SCHEDULE_FILE"
     SCHEDULE="* * * * *"
     SCRIPT_NAME=$WORKING_DIRECTORY/$0
     COMMAND='/bin/bash' #these spaces are essential for proper file formatting
