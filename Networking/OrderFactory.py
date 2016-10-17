@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from Networking import Orders, Errors
 
 
@@ -11,6 +13,7 @@ class OrderFactory:
         else:
             raise Errors.UnknownOrderError
 
+    @abstractmethod
     def create_order(self, request):
         pass
 
