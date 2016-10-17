@@ -27,7 +27,7 @@ class BaseTestCase(unittest.TestCase):
         sock.connect((self.test_host, self.test_port))
         sock.send(data)
         sock.close()
-    
+
     def _receive_data_via_ssl(self, sock=None, data_size=1024):
         if not sock:
             sock = self._create_unwraped_socket()
