@@ -64,6 +64,9 @@ target/
 *~
 
 # Backups, databases, passwords and other working files
-Configuration/
+!Configuration/SSL
+!Configuration/local
+Configuration/SSL/*
+Configuration/*
 Backup/
 Database/
