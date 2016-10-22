@@ -67,4 +67,5 @@ target/
 *.conf
 *.cert
 *.pem
+*.csr
 Backup/
