@@ -2,11 +2,11 @@ import socketserver
 import threading
 import ssl
 from datetime import datetime, timedelta
-
 import os
 
-from Networking import Errors, OrderFactory
-from Networking.BannedAddressesCache import BannedAddressesCache
+from . import Errors, OrderFactory
+from .Authentication import AuthenticationHandler
+from .BannedAddressesCache import BannedAddressesCache
 from Setup.Settings import BASE_PATH
 
 
@@ -42,7 +42,8 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         try:
-            self._authorize_connection()
+            AuthenticationHandler.authenticate_connection(address=self.client_address[0],
+                                                          request=self.request)
             self._receive_data_from_network()
             order_factory = OrderFactory.OrderFactory.create_factory(self.data)
             order = order_factory.create_order(self.request)
@@ -55,25 +56,22 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
             self.request.close()
             self._ban_client()
 
-        except Errors.AuthorizationError:
+        except Errors.AuthenticationError:
             self.request.close()
+
+    def _send_certificate(self):
+        pass
 
     def _receive_data_from_network(self):
         self.data = self.request.recv(1024)
-        print('Received:'.format(self.data))
+        print('Received: {}'.format(self.data))
         self.data = self.data.decode('utf-8')
-
-    # TODO: extend this, introduce password checking
-    def _authorize_connection(self):
-        if self._is_banned():
-            print('Address: {0} is banned. Access to server denied.'.format(self.client_address[0]))
-            raise Errors.AuthorizationError
-        else:
-            print('Connection authorized: {}'.format(self.client_address[0]))
 
     def _is_banned(self):
         return banned_addresses.contains(self.client_address[0])
 
     def _ban_client(self):
         banned_addresses.add(self.client_address[0])
+
+
 
