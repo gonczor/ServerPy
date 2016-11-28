@@ -1,19 +1,16 @@
 import os
 import time
-import abc
 
 
 class Order:
     def __init__(self, request):
         self.request = request
 
-    @abc.abstractmethod
     def get_message(self):
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def perform_order(self):
-        pass
+        raise NotImplementedError
 
     def _confirm_order(self):
         print('Confirming {}'.format(self.get_message()))
