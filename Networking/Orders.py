@@ -7,10 +7,10 @@ class Order:
         self.request = request
 
     def get_message(self):
-        pass
+        raise NotImplementedError
 
     def perform_order(self):
-        pass
+        raise NotImplementedError
 
     def _confirm_order(self):
         print('Confirming {}'.format(self.get_message()))
