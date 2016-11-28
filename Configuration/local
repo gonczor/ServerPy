@@ -1,0 +1,3 @@
+# rename this to PyHomeServer.conf and modify if needed
+Port: 12345
+Address: 127.0.0.1

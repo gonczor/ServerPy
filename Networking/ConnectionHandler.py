@@ -28,9 +28,11 @@ class BannedAddresses:
 class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
     def get_request(self):
         (socket, address) = socketserver.TCPServer.get_request(self)
-        return (ssl.wrap_socket(socket, server_side=True,
-                                certfile=os.path.join(BASE_PATH, 'Configuration', 'Certificates', 'server.crt'),
-                                keyfile=os.path.join(BASE_PATH, 'Configuration', 'Certificates', 'server.key'),),
+        return (ssl.wrap_socket(socket,
+                                server_side=True,
+                                certfile=os.path.join(BASE_PATH, 'Configuration', 'SSL', 'server.crt'),
+                                keyfile=os.path.join(BASE_PATH, 'Configuration', 'SSL', 'server.key'),
+                                ssl_version=ssl.PROTOCOL_TLSv1),
                 address)
 
 
@@ -58,13 +60,16 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
 
     def _receive_data_from_network(self):
         self.data = self.request.recv(1024)
+        print('Received:'.format(self.data))
         self.data = self.data.decode('utf-8')
 
-    # TODO: extend this, introduce password checking, SSL
+    # TODO: extend this, introduce password checking
     def _authorize_connection(self):
         if self._is_banned():
             print('Address: {0} is banned. Access to server denied.'.format(self.client_address[0]))
             raise Errors.AuthorizationError
+        else:
+            print('Connection authorized: {}'.format(self.client_address[0]))
 
     def _is_banned(self):
         return banned_addresses.contains(self.client_address[0])

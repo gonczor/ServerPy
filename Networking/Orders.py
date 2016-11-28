@@ -13,6 +13,7 @@ class Order:
         pass
 
     def _confirm_order(self):
+        print('Confirming {}'.format(self.get_message()))
         self.request.send(self.get_message().encode('utf-8'))
 
 
