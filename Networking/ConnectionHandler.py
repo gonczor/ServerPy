@@ -1,5 +1,4 @@
 import socketserver
-import threading
 import ssl
 from datetime import datetime, timedelta
 import os
@@ -10,9 +9,9 @@ from .BannedAddressesCache import BannedAddressesCache
 from Setup.Settings import BASE_PATH
 
 
-banned_addresses_tmp = []
-banned_addresses = BannedAddressesCache()
-lock_ban = threading.Lock()
+# banned_addresses_tmp = []
+# banned_addresses = BannedAddressesCache()
+# lock_ban = threading.Lock()
 
 
 def setup_connection_handler(host, port):
@@ -37,8 +36,10 @@ class ThreadedTCP(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 
 class ConnectionHandler(socketserver.BaseRequestHandler):
-    global banned_addresses_tmp
-    global lock_ban
+
+    def __init__(self, request, client_address, server):
+        super().__init__(request, client_address, server)
+        self.banned_addresses = BannedAddressesCache()
 
     def handle(self):
         try:
@@ -68,10 +69,7 @@ class ConnectionHandler(socketserver.BaseRequestHandler):
         self.data = self.data.decode('utf-8')
 
     def _is_banned(self):
-        return banned_addresses.contains(self.client_address[0])
+        return self.banned_addresses.contains(self.client_address[0])
 
     def _ban_client(self):
-        banned_addresses.add(self.client_address[0])
-
-
-
+        self.banned_addresses.add(self.client_address[0])

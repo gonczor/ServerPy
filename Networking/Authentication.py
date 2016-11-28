@@ -8,10 +8,14 @@ lock_ban = threading.Lock()
 
 
 class AuthenticationHandler:
+    """
+    Checks whether client has right to connect to the server. Throws proper exceptions if not.
+    """
     @staticmethod
     def authenticate_connection(request, address):
         AuthenticationHandler._check_address_is_banned(address)
         AuthenticationHandler._check_correct_credentials_provided(request)
+        AuthenticationHandler._send_ack(request)
         print('Connection authorized: {}'.format(address))
 
     @classmethod
@@ -34,7 +38,11 @@ class AuthenticationHandler:
         """
         :return: password required for authentication
         """
-        if username == 'user':
-            return 'pass'
+        if username == b'user':
+            return b'pass'
         else:
             raise Errors.AuthenticationError
+
+    @classmethod
+    def _send_ack(cls, request):
+        request.send(b'ACK')
