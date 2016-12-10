@@ -19,6 +19,7 @@ class BannedAddressesMock:
 
 class AuthenticationTestCase(TestCase):
     def setUp(self):
+        super(AuthenticationTestCase, self).setUp()
         self.correct_credentials = b'user pass'
         self.wrong_username_credentials = b'wrong_username pass'
         self.wrong_password_credentials = b'user wrong_pass'
