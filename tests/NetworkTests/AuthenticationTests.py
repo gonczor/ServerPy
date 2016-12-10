@@ -4,6 +4,7 @@ from mock import mock
 
 from Networking.Authentication import AuthenticationHandler
 from Networking.Errors import AuthenticationError
+from tests.test_utils.NetworkUtils import ConnectionMock
 
 
 class BannedAddressesMock:
@@ -14,24 +15,6 @@ class BannedAddressesMock:
 
     def contains(self, key):
         return key in self.cache
-
-
-class RequestMock:
-    def __init__(self, to_return):
-        self.to_return = to_return
-        self.to_send = None
-
-    def recv(self, buffer):
-        return self.to_return
-
-    def send(self, data):
-        self.to_send = data
-
-
-class ConnectionMock:
-    def __init__(self, request_to_return):
-        self.request = RequestMock(request_to_return)
-        self.address = None
 
 
 class AuthenticationTestCase(TestCase):
