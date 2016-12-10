@@ -1,7 +1,7 @@
-import unittest
+from unittest import TestCase
 
 
-class AuthenticationTestCase(unittest.TestCase):
+class AuthenticationTestCase(TestCase):
     def test_authentication_success(self):
         pass
 
