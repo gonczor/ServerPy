@@ -4,4 +4,4 @@ Anyway, the methodology used here is following:
     1. create test in NetworkTest or EmbeddedTests package
     2. Create new module if needed
     3. Add whole module to correct __init__.py (use "from MyTests.py import *"
-    4. Run tests.
+    4. Run tests by calling "python3 test_runner.py" from "tests" directory
