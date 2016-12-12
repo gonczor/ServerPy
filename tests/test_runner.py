@@ -1,7 +1,14 @@
+import tests.NetworkTests.AuthenticationTests
+import tests.NetworkTests.BannedAdressCacheTests
 import unittest
 
-# Leave this as it is. Otherwise tests will fail
-from tests.NetworkTests.AuthenticationTests import *
-from tests.NetworkTests.BannedAdressCacheTests import *
 
-unittest.main()
+def run():
+    s = unittest.defaultTestLoader.loadTestsFromModule(tests.NetworkTests.AuthenticationTests.AuthenticationTestCase)
+    unittest.TextTestRunner().run(s)
+    s = unittest.defaultTestLoader.loadTestsFromTestCase(tests.NetworkTests.BannedAdressCacheTests.BannedAdressCacheTestCase)
+    unittest.TextTestRunner().run(s)
+
+if __name__ == '__main__':
+    suite = unittest.defaultTestLoader.loadTestsFromModule(tests.NetworkTests)
+    unittest.TextTestRunner().run(suite)
