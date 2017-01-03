@@ -17,12 +17,6 @@ class BannedAddressesMock:
         return key in self.cache
 
 
-class SecondTestCase(TestCase):
-    def test_simple(self):
-        self.assertAlmostEqual(2+2, 4)
-        print('simple')
-
-
 class AuthenticationTestCase(TestCase):
     def setUp(self):
         super(AuthenticationTestCase, self).setUp()
