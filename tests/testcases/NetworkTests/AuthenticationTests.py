@@ -31,6 +31,7 @@ class AuthenticationTestCase(TestCase):
         connection = ConnectionMock(self.correct_credentials)
         connection.address = self.address
         AuthenticationHandler.authenticate_connection(connection.request, connection.address)
+        self.assertEqual(connection.request.to_send, b'ACK')
 
     @mock.patch('Networking.BannedAddressesCache', BannedAddressesMock)
     def test_authentication_fail(self):
