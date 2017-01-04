@@ -2,12 +2,12 @@ from unittest import TestCase
 
 import datetime
 import contextlib
-from mock import mock
 
 from Networking.BannedAddressesCache import BannedAddressesCache
 
 
 real_datetime_class = datetime.datetime
+
 
 @contextlib.contextmanager
 def mock_now(dt_value):

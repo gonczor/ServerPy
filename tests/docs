@@ -1,7 +1,20 @@
-A few words about testing. I got quite stuck with this at the beginning and I still can't say for sure what was wrong.
+Tests are organized in two main modules: NetworkTests and EmbeddedTests, both of which are stored int testcases
+directory in order to provide proper organization. Any testutils common for more than one test should be stored in
+test_utils directory.
 
-Anyway, the methodology used here is following:
-    1. create test in NetworkTest or EmbeddedTests package
-    2. Create new module if needed
-    3. Add whole module to correct __init__.py (use "from MyTests.py import *"
-    4. Run tests by calling "python3 test_runner.py" from "tests" directory
+The testcases.__init__.py file has to store all .py files containing test cases using following pattern:
+".TestPackage.TestFile import *"
+
+All test cases names must start with 'test' to make them run.
+
+While writing unittest remember the following:
+    * each test case tests one thing only. If you have written a piece of code which, for example, sends and receives
+    messages write separate tests for receiving and sending messages;
+    * Remember to test for fail. In previous example this would mean writing additional tests for testing what happens
+    if we send message in wrong format, receive something unexpected etc.
+    * The code should be idiot-proof, so ensure you test for things such as wrong user input.
+    * Tests should be simple. It's OK to compare testcase result with manual testing, but if you think it would be
+    useful to test testcase for providing correct feedback it means your code organization sucks.
+    * Unlike other cases it's OK to duplicate tested areas. More tests = better tests provided that you do it
+    intelligently.
+    * If you have any problems look at the code created earlier. You can also contact me via email.
