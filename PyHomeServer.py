@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
-import threading
+import sys
 import signal
-import time
-from Interface import Output
-from Networking import ConnectionHandler
+import threading
+
+from tests.test_runner import run as run_tests
+from Services.EmbeddedServices import EmbeddedCommunicationService
+from Services.NetworkServices import NetworkCommunicationService
 from Setup.ReadSetup import get_setup
-from Setup import Settings
 
 
 class Threads(threading.Thread):
@@ -22,68 +23,6 @@ class Threads(threading.Thread):
 
     def terminate(self):
         self.service.terminate()
-
-
-class Services:
-    # Entry point for threads
-    def service_entry_point(self):
-        pass
-
-    def terminate(self):
-        pass
-
-    def reset(self):
-        pass
-
-
-class NetworkCommunicationService(Services):
-    def __init__(self):
-        self._connection = None
-        self._setup()
-        self._time_wait = 60
-
-    def _setup(self):
-        self._connection = ConnectionHandler.setup_connection_handler(Settings.ADDRESS, Settings.PORT)
-
-    def service_entry_point(self):
-        try:
-            self._serve()
-        except FileNotFoundError:
-            Output.config_error()
-        finally:
-            self._connection.shutdown()
-
-    def _serve(self):
-        self._connection.serve_forever()
-
-    def terminate(self):
-        self._connection.shutdown()
-        self._connection.server_close()
-        print('Connection has been shut down.')
-
-    def reset(self):
-        self.terminate()
-        self._sleep()
-
-    def _sleep(self):
-        print('Going to sleep for 60 seconds...')
-        t = self._time_wait
-        while t > 0:
-            time.sleep(5)
-            t -= 5
-            print('\r{0} seconds remaining...'.format(t), end='')
-        print('\nServer restarted.')
-
-
-class EmbeddedCommunicationService(Services):
-    def service_entry_point(self):
-        pass
-
-    def terminate(self):
-        pass
-
-    def reset(self):
-        pass
 
 
 class Main:
@@ -127,6 +66,9 @@ class Main:
             elif self.SIGHUP_flag_raised:
                 self.SIGHUP_flag_raised = False
 
-if __name__ == '__main__':
+
+if 'test' in sys.argv:
+    run_tests()
+else:
     main = Main()
     main.main()

@@ -1,7 +1,8 @@
 import unittest
 
-# Leave this as it is. Otherwise tests will fail
-from tests.NetworkTests.AuthenticationTests import *
-from tests.NetworkTests.BannedAdressCacheTests import *
+from . import testcases
 
-unittest.main()
+
+def run():
+    s = unittest.defaultTestLoader.loadTestsFromModule(testcases)
+    unittest.TextTestRunner().run(s)
