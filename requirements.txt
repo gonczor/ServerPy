@@ -1,0 +1,9 @@
+Prank: this file won't allow you currently install all the stuff by running pip install -r requirements.txt. Sorry.
+I have to introduce some things to do it.
+
+In order to run this server on your raspberry pi you'll need the following:
+NRF24
+spidev
+RPi.GPIO
+Video tutorial how to do it:
+https://www.youtube.com/watch?v=_68f-yp63ds
