@@ -66,3 +66,6 @@ target/
 # Backups, databases, passwords and other working files
 SSL/
 Backup/
+
+# simple client for testing communication. I assume this will be frequently changed
+simple_client.py
