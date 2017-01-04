@@ -23,17 +23,16 @@ function perform_backup(){
     BACKUP_FILENAME=$(date +%Y-%m-%d)
     BACKUP_FILENAME+=".tar.gz"
     BACKUP_DIR="$WORKING_DIRECTORY/"
-    BACKUP_DIR+="$(cat $WORKING_DIRECTORY/Configuration/PyHomeServer.conf | grep "Backup directory:" |  awk '{print $3}')"
+    BACKUP_DIR+="$(cat $WORKING_DIRECTORY/Setup/settings.py | grep "BACKUP_DIR = " |  awk '{print $3}')"
+    BACKUP_DIR="$(echo $BACKUP_DIR | sed "s/['\"]//g")"
+    echo $BACKUP_DIR
 
     FILES_TO_INCLUDE=$WORKING_DIRECTORY/Configuration
     FILES_TO_INCLUDE+=" "
-    FILES_TO_INCLUDE+=$WORKING_DIRECTORY/Database
-    echo $FILES_TO_INCLUDE
 
     if [ ! -d "$BACKUP_DIR" ]; then
         mkdir "$BACKUP_DIR"
     fi
-    touch trigger
 
     tar -cpzvf $BACKUP_DIR/$BACKUP_FILENAME $FILES_TO_INCLUDE
 	

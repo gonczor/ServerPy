@@ -6,12 +6,7 @@ import os
 from . import Errors, OrderFactory
 from .Authentication import AuthenticationHandler
 from .BannedAddressesCache import BannedAddressesCache
-from Setup.Settings import BASE_PATH
-
-
-# banned_addresses_tmp = []
-# banned_addresses = BannedAddressesCache()
-# lock_ban = threading.Lock()
+from Setup.settings import BASE_PATH
 
 
 def setup_connection_handler(host, port):
