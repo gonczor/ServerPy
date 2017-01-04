@@ -7,7 +7,6 @@ import threading
 from tests.test_runner import run as run_tests
 from Services.EmbeddedServices import EmbeddedCommunicationService
 from Services.NetworkServices import NetworkCommunicationService
-from Setup.ReadSetup import get_setup
 
 
 class Threads(threading.Thread):
@@ -44,7 +43,6 @@ class Main:
 
     def main(self):
         while True:
-            get_setup()
 
             signal.signal(signal.SIGINT, self.stop_server)
             signal.signal(signal.SIGHUP, self.reset_server)
