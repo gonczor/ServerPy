@@ -5,7 +5,7 @@ DEFAULT_PORT="12345"
 DEFAULT_BACKUP_DIRECTORY="Backup"
 CONFIG_FILE="Setup/settings.py"
 
-echo :import os" > $CONFIG_FILE
+echo "import os" > $CONFIG_FILE
 
 echo Enter address you want to use. The list of available ports with interfaces is listed below.
 ip -f inet addr | awk '{print  $2}' | grep -v forever
