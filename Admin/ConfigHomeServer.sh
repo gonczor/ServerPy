@@ -42,6 +42,8 @@ else
     echo "BACKUP_DIR = '$BACKUP_DIRECTORY'" >> $CONFIG_FILE
 fi
 
+echo "BASE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')" >> $CONFIG_FILE
+
 # TODO implement backup setting
 
 SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
