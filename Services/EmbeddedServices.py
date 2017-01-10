@@ -5,6 +5,7 @@ from Services.Base import Services
 class EmbeddedCommunicationService(Services):
     def __init__(self):
         self._handler = None
+        self._setup()
 
     def service_entry_point(self):
         self._handler.serve()
