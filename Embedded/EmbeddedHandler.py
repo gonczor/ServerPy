@@ -67,6 +67,6 @@ class EmbeddedHandler:
         
     def serve(self):
         while True:
-            if self.state_check_timestamp + self.state_check_interval > datetime.datetime.now():
+            if self.state_check_timestamp + self.state_check_interval < datetime.datetime.now():
                 self._ping(self._to_sendable('GETSTATE'))
                 self.state_check_timestamp = datetime.datetime.now()
