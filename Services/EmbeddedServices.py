@@ -1,3 +1,4 @@
+from Embedded.EmbeddedHandler import EmbeddedHandler
 from Services.Base import Services
 
 
@@ -6,13 +7,13 @@ class EmbeddedCommunicationService(Services):
         self._handler = None
 
     def service_entry_point(self):
-        pass
+        self._handler.serve()
 
     def _setup(self):
-        pass
+        self._handler = EmbeddedHandler()
 
     def terminate(self):
         pass
 
     def reset(self):
-        pass
+        self._handler = EmbeddedHandler()

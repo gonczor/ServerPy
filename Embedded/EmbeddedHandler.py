@@ -65,7 +65,7 @@ class EmbeddedHandler:
         print('Message decoded to: {}'.format(string))
         self.radio.stopListening()
         
-    def handle(self):
+    def serve(self):
         while True:
             if self.state_check_timestamp + self.state_check_interval > datetime.datetime.now():
                 self._ping(self._to_sendable('GETSTATE'))
