@@ -2,7 +2,7 @@ import time
 
 from Networking import ConnectionHandler
 from Services.Base import Services
-from Setup import Settings
+from Setup import settings
 
 
 class NetworkCommunicationService(Services):
@@ -12,7 +12,7 @@ class NetworkCommunicationService(Services):
         self._time_wait = 60
 
     def _setup(self):
-        self._handler = ConnectionHandler.setup_connection_handler(Settings.ADDRESS, Settings.PORT)
+        self._handler = ConnectionHandler.setup_connection_handler(settings.ADDRESS, settings.PORT)
 
     def service_entry_point(self):
         try:
