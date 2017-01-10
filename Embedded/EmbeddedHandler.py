@@ -9,7 +9,7 @@ import spidev
 
 class EmbeddedHandler:
     def __init__(self):
-        self.state_check_interval = datetime.timedelta(minutes=5)
+        self.state_check_interval = datetime.timedelta(seconds=10)
         self.state_check_timestamp = datetime.datetime.now()
         GPIO.setmode(GPIO.BCM)
 
