@@ -48,7 +48,7 @@ class EmbeddedHandler:
         start = time.time()
         self.radio.startListening()
         while not self.radio.available(0):
-            if time.time() - start > 0.5:
+            if time.time() - start > 2:
                 print('Time out')
                 return
 
