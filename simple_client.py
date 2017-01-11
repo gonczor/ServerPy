@@ -10,7 +10,7 @@ ssl_sock = ssl.wrap_socket(s,
                            cert_reqs=ssl.CERT_REQUIRED,
                            )
 
-ssl_sock.connect(('192.168.43.57', 12345))
+ssl_sock.connect(('192.168.2.193', 12345))
 
 print(ssl_sock.getpeername())
 print(ssl_sock.cipher())
