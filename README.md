@@ -13,9 +13,9 @@ Basic actions are called from server.sh bash script with adequate options.
 
 Configuration is stored in Configuration/PyHomeServer.conf. Currently it allows to define desired IP address for the server and port for listening. In future it will also hold backup storage directory and crontab config for backups. Currently it is hardcoded.
 
-#For contributors
+# For contributors
 
-For information please contact me at wiktor.gonczaronek <at> gmail.com
+For information please contact me at wiktor.gonczaronek [at] gmail.com
 
 The project aims at providing services for intelligent home and serve some educational purposes. Therefore everyone is welcome to contribute as long as they follow certain rules:
 1. I don't like bad code. If you think you will make a pull request with a 100 line long function with 5 nested ifs, or with variable named like "mkdfs", don't even touch the keyboard.
@@ -46,14 +46,27 @@ If user enters invalid password or send incorret order connection is shut down a
 
 Orders currently available are:
  * welcome: send welcome message;
- * send file: send example file.
+ * send file: send example file;
+ * setpump: set pump parameters.
 
 # Database handling
 Currently not implemented.
 
 # Authentication
-Currently not implemented.
+Server uses SSL for secure communication with self-signed certs. To generate one simply type <b>./server.sh ssl test</b> (since it's still being tested, but is useful for home appliances). The cert and pem files will be generated in Configuration/SSL directory. You need .crt file on your customer application to communicate with server.
+<br>
+When it comes to username and password... Well... Type in user/pass to get in. This still requires implementation.
 
-#Embedded handling
-Currently not implemented.
+# Embedded handling
 
+Raspberry Pi uses NRF24L01 radio to communicate with end devices.
+
+It's server's duty to handle entire process. It starts with sending message to Arduino. Current options are:
+<ul>
+<li>GETSTATE - request for state
+<li> SETPUMPxxxxyyyy - set pump parameters.
+</ul>
+
+The pump is actual pump connected to arduino that is on the other side of wave. It allows to set two parameters.
+While setting pump parameters x's are 4 digits base-10 that represent how long the pump is set on after detecting that soil is dry.
+Y's represent how long the pump remains inactive after doing pumping. See <a href="https://github.com/gonczor/watering/tree/master">  this project page</a> for further reference.
