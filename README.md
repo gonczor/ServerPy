@@ -68,5 +68,5 @@ It's server's duty to handle entire process. It starts with sending message to A
 </ul>
 
 The pump is actual pump connected to arduino that is on the other side of wave. It allows to set two parameters.
-While setting pump parameters x's are 4 digits base-10 that represent how long the pump is set on after detecting that soil is dry.
-Y's represent how long the pump remains inactive after doing pumping. See <a href="https://github.com/gonczor/watering/tree/master">  this project page</a> for further reference.
+While setting pump parameters x's are 4 digits base-10 that represent how long (in seconds) the pump is set on after detecting that soil is dry.
+Y's represent how long (in seconds) the pump remains inactive after doing pumping. See <a href="https://github.com/gonczor/watering/tree/master">  this project page</a> for further reference.
