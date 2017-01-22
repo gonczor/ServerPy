@@ -32,7 +32,7 @@ class EmbeddedHandler:
         self.radio.printDetails()
 
         print('Performing initial pump setup.')
-        self._ping(self._to_sendable('SETPUMP020100'))
+        self._ping(self._to_sendable('SETPUMP00200100'))
 
     @staticmethod
     def _to_sendable(msg):
