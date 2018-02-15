@@ -48,7 +48,7 @@ echo "BASE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 # TODO implement backup setting
 
-SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
+SERVER_PID=$(pidof PyHomeServer.py)
 if [ "$SERVER_PID" != "" ]; then
     kill -s SIGHUP $SERVER_PID
 fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SERVER_PID=$(ps -ax | grep PyHomeServer.py | grep -v grep | awk '{print $1}')
+SERVER_PID=$(pidof PyHomeServer.py)
 
 if [ "$SERVER_PID" = "" ]; then
     printf "Starting server..."
